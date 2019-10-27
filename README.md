@@ -5,7 +5,7 @@
 - Estelle Sernoux
 - Jasmain Huynh
 - Johan Leygonie
-- .
+- Philip Siemund
 
 ## Workplan
 
