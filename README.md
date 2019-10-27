@@ -9,7 +9,7 @@
 
 ## Workplan
 
-see file "Workplan.txt"
+See file "Workplan.md". Document containing the planned distribution of sub-tasks that have to be done in order to achieve the goal.
 
 ## ChangeLog
 
