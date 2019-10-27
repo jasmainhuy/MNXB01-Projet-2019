@@ -2,10 +2,10 @@
 
 ## Authors
 
-Estelle Sernoux
-Jasmain Huynh
-Johan Leygonie
-.
+- Estelle Sernoux
+- Jasmain Huynh
+- Johan Leygonie
+- .
 
 ## Workplan
 
