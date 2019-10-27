@@ -13,4 +13,4 @@ See file "Workplan.md". Document containing the planned distribution of sub-task
 
 ## ChangeLog
 
-see file "ChangeLog.md". Document containing our progress.
+See file "ChangeLog.md". Document containing our progress.
