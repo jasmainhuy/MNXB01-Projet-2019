@@ -11,7 +11,7 @@ We to have select one of the available SMHI datasets and write a program that ex
 
 - Section 3 contains a few examples of what kind of information you could get from the data. Decide on at least three interesting results to produce.
   - Jasmain - 3.3 example "The warmest and coldest day of each year"
-  - Estelle - 3.4 example "3.4 The mean temperature of each year"
+  - Estelle - 3.4 example "The mean temperature of each year"
 
 - At least one of them should be our own idea and should not come from Section 3
 
