@@ -9,8 +9,8 @@
 
 ## Workplan
 
-See file "Workplan.md". Document containing the planned distribution of sub-tasks that have to be done in order to achieve the goal.
+[Workplan](Workplan.md): Document containing the planned distribution of sub-tasks that have to be done in order to achieve the goal.
 
 ## ChangeLog
 
-See file "ChangeLog.md". Document containing our progress.
+[ChangeLog](ChangeLog.md): Document containing our progress.
