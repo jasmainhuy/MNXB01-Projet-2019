@@ -5,6 +5,8 @@
 #include <map>
 #include <stdlib.h>
 
+#include <TH1.h> // 1d histogram classes
+
 #define NB_MAX_FILE_VALUES 1024
 #define MAX_YEAR 2100 // maximum year of input data
 
@@ -65,6 +67,7 @@ std::map<int, double> meanTempPerYear(std::vector<std::string> entries) {
         for(size_t i=0; i<MAX_YEAR; i++) {
                 if(nb_values[i]>0) {
                         mean = sum_values[i]/nb_values[i];
+                        //std::cerr << "year : " << i << " mean : " << mean << std::endl;
                         ret.insert(std::make_pair<int, double>((int)i, (double)mean));
                 }
         }
@@ -89,6 +92,19 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         }
         
         std::map<int, double> mean = meanTempPerYear(entries);
+        
+        // create new histogram object
+        TH1D* hist = new TH1D("hist", "Mean Temp Per Year", mean.size(), 1960, 2010);
+        
+        for( std::map<int, double>::iterator it = mean.begin();
+             it != mean.end();
+             it++ ) {
+                // fill hist with date and value from mean temp per year map
+                //std::cerr << "value : " << it->second << std::endl;
+                hist->Fill(it->first, it->second);
+        }
+        
+        hist->Draw();
         
         //This code is given from project instruction for creating the graph
         //TGraph* graph = new TGraph();
