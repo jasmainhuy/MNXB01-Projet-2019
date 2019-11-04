@@ -44,8 +44,8 @@ std::map<int, double> meanTempPerYear(std::vector<std::string> entries) {
                 year_str = s.substr(0, 4);
                 year = atoi(year_str.c_str());
                 
-                // get value from 3rd field
-                for(size_t i=0; i<2; i++) {
+                // get value from 5th field
+                for(size_t i=0; i<4; i++) {
                         pos = s.find(' '); // find first delimiter
                         s.substr(0, pos);
                         s.erase(0, pos + 1);
@@ -67,7 +67,7 @@ std::map<int, double> meanTempPerYear(std::vector<std::string> entries) {
         for(size_t i=0; i<MAX_YEAR; i++) {
                 if(nb_values[i]>0) {
                         mean = sum_values[i]/nb_values[i];
-                        //std::cerr << "year : " << i << " mean : " << mean << std::endl;
+                        std::cerr << "year : " << i << " mean : " << mean << std::endl;
                         ret.insert(std::make_pair<int, double>((int)i, (double)mean));
                 }
         }
