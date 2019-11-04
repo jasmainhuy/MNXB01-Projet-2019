@@ -94,7 +94,7 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         std::map<int, double> mean = meanTempPerYear(entries);
         
         // create new histogram object
-        TH1D* hist = new TH1D("hist", "Mean Temp Per Year", mean.size(), 1960, 2010);
+        TH1D* hist = new TH1D("hist", "Mean Temp Per Year", mean.size(), 1700, 2050);
         
         for( std::map<int, double>::iterator it = mean.begin();
              it != mean.end();
