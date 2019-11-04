@@ -13,6 +13,7 @@ We to have select one of the available SMHI datasets and write a program that ex
   - Jasmain - 3.3 example "The warmest and coldest day of each year"
   - Estelle - 3.4 example "The mean temperature of each year"
   - Philip - Personal examples:  "Temperature distribution for each day during winter for each year", "Mean temperature distribution during winter for each year", "Temperature distribution for Christmas Eve every year"
+  - Johan - 3.1 example "The temperature at a given day"
 
 - At least one of them should be our own idea and should not come from Section 3
 

@@ -1,13 +1,18 @@
 #include "tempTrender.h"
 #include <string>
 
-void project() {
-	string pathToFile = "../datasets/tempdata_Lund.txt"; //Put the path to your data file here
-	tempTrender t(pathToFile); //Instantiate your analysis object
+
+void tempOnDay(n){
 	
-	//t.tempOnDay(8, 23); //Call some functions that you've implemented
-	//t.tempOnDay(235);
-	//t.tempPerDay();
-	//t.hotCold();
-	t.tempPerYear(2000);
+	
+}
+
+
+void project() {
+	string pathToFile = "/home/courseuser/Documents/Project/MNXB01-project/datasets/smhi-openda_Karlstad.csn"; //Put the path to your data file here
+	tempTrender t(pathToFile); //Instantiate your analysis object
+	t.tempOnDay(235);
+	
+	
+
 }
