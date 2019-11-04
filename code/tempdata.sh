@@ -7,6 +7,10 @@
 
 DATASET=Lund
 
-awk -F ';' 'x==1 {print $1 " " $2 " " $3 " " $4} /Datum/ {x=1}' /Users/home/MNXB01-Project-2019/datasets/smhi-opendata_${DATASET}.csv >> /Users/home/MNXB01-Project-2019/datasets/tempdata_${DATASET}.txt
+awk -F ';' 'x==1 {print $1 " " $2 " " $3 " " $4} /Datum/ {x=1}' \
+/Users/philipsiemund/MNXB01-Project-2019/datasets/smhi-opendata_${DATASET}.csv \
+>> /Users/philipsiemund/MNXB01-Project-2019/datasets/tempdata_${DATASET}.txt
 
-sed -i '' 's/[-:,]//g' /Users/home/MNXB01-Project-2019/datasets/tempdata_${DATASET}.txt
+sed -i '' 's/[-:,]//g' \
+/Users/philipsiemund/MNXB01-Project-2019/datasets/tempdata_${DATASET}.txt
+
