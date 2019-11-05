@@ -4,13 +4,14 @@
 #include <fstream>
 #include <map>
 #include <stdlib.h>
-
+#include <TF1.h>
+#include <TStyle.h>
 #include <TH1.h> // 1d histogram classes
 
-#define NB_MAX_FILE_VALUES 1024
+#define NB_MAX_FILE_VALUES 20000
 #define MAX_YEAR 2100 // maximum year of input data
 
-tempTrender::tempTrender(string filePath) {
+tempTrender::tempTrender(std::string filePath) {
         // Store file path parameter into member variable
         _filePath = filePath;
 
@@ -96,26 +97,29 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         std::map<int, double> mean = meanTempPerYear(entries);
 
         // create new histogram object
-        TH1D* hist = new TH1D("hist", "Mean Temp Per Year", mean.size(), 1722, 2100);
-        
+        TH1D* graph = new TH1D("graph", "Mean Temp Per Year", mean.size(), 1722, 2100);
+
+
         for( std::map<int, double>::iterator it = mean.begin();
              it != mean.end();
              it++ ) {
                 // fill hist with date and value from mean temp per year map
                 //std::cerr << "value : " << it->second << std::endl;
-                hist->Fill(it->first, it->second);
+                graph->Fill(it->first, it->second);
         }
         
-        void extrapolate(Int_t n)
-
-        hist->Draw();
-
         //This code is given from project instruction for creating the graph
         //TGraph* graph = new TGraph();
         //for(int bin = 1; bin < hist->GetNbinsX(); ++bin) {
-        //        graph->Expand(graph->GetN() + 1, 100);
-        //        graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
-        //                hist->GetBinContent(bin));
+            //graph->Expand(graph->GetN() + 1, 100);
+            //graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
+            //hist->GetBinContent(bin));
         //}
-        //graph->Draw("SAME C");
+        graph->Draw("SAME C");
+
+        //void extrapolate(Int_t n)
+
+        //graph->Draw();
+
+
 }
