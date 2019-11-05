@@ -78,7 +78,7 @@ std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
 }
         }
         
-void tempTrender::hottestTempPerYear(int yearToExtrapolate) {
+void tempTrender::hottestTempPerYear(int yearToExtrapol) {
 
         // open input file
         std::string line;
