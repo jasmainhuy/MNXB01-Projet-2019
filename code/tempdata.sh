@@ -3,10 +3,14 @@
 #Extracts only the temperature data from SMHI datasets and saves the output in a new file data_for_${DATASET}.txt
 #Requires GNU awk or mawk. Check your paths! 
 
-#DATASET=Lund
-DATASET=Soderarm
+DATASET=$@
+OUTPUTFILENAME=data_for_${DATASET}
 
-# paths have to be relative from <project folder>/code folder
+if [[ -z "$DATASET" ]]; then
+   echo "Please insert valid argument."
+   exit 1
+fi
+
 awk -F';' ' 
     x==1 {
         gsub(/-/," ",$1)
@@ -17,5 +21,3 @@ awk -F';' '
         print $1, $2, $3, $4, 0 + strftime("%j", t)
     }
     /Datum/ {x=1}' ../datasets/smhi-opendata_${DATASET}.csv >> ../datasets/${OUTPUTFILENAME}.txt 
-
-sed -i 's/[-:,]//g' ../datasets/tempdata_${DATASET}.txt
