@@ -8,6 +8,7 @@
 #include <TStyle.h>
 #include <TGraph.h>
 #include <TCanvas.h>
+#include <TLine.h>
 #include <TH1.h> // 1d histogram classes
 
 #define NB_MAX_FILE_VALUES 200000
@@ -89,30 +90,45 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         // create array to store values
         std::vector<std::string> entries;
 
-        // read values and stor it into array, hist or something else
+        // read values and store it into array, hist or something else
         if(inputfile.is_open()) {
                 while(getline(inputfile, line)) {
                         entries.push_back(line);
                 }
         }
 
-        std::map<int, double> mean = meanTempPerYear(entries);
+        // compute mean per year
+        std::map<int, double> meanPerYear = meanTempPerYear(entries);
+        
+        // compute mean for all time
+        double meanAllTime = 0;
+        for( std::map<int, double>::iterator it = meanPerYear.begin();
+             it != meanPerYear.end();
+             it++ ) {
+                 meanAllTime += it->second;
+         }
+         meanAllTime /= meanPerYear.size();
+         
+         std::cout << "meanAllTime = " << meanAllTime << endl;
+        
 
         // create canvas for graph
         TCanvas *c1 = new TCanvas("Estelle", "Project : Mean Temp Per Year");
 
         // create new histogram object
-        TH1F* hist = new TH1F("graph", "Mean Temp Per Year", mean.size(), 1722, 2100);
+        TH1F* hist = new TH1F("graph", "Mean Temp Per Year", meanPerYear.size(), 1722, 2100);
 
-
-        for( std::map<int, double>::iterator it = mean.begin();
-             it != mean.end();
+        // fill hist with mean temp per year values from input file
+        for( std::map<int, double>::iterator it = meanPerYear.begin();
+             it != meanPerYear.end();
              it++ ) {
                 // fill hist with date and value from mean temp per year map
                 //std::cerr << "value : " << it->second << std::endl;
                 hist->Fill(it->first, it->second);
         }
-
+        //Draw horizontal mean
+        TLine *meanline = new TLine (1722,meanAllTime,2013,meanAllTime);
+        
         //This code is given from project instruction for creating the graph
         TGraph* graph = new TGraph();
         
@@ -123,11 +139,13 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         //    graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
         //    hist->GetBinContent(bin));
        // }
-        graph->Draw("SAME C");
+        //graph->Draw("SAME C");
 
         //void extrapolate(Int_t n)
 
-        //hist->Draw();
+        //graph->PaintGraph("B");
+        meanline->Draw();
+        hist->Draw();
 
 
 }
