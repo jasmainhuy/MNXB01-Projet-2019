@@ -6,9 +6,11 @@
 #include <stdlib.h>
 #include <TF1.h>
 #include <TStyle.h>
+#include <TGraph.h>
+#include <TCanvas.h>
 #include <TH1.h> // 1d histogram classes
 
-#define NB_MAX_FILE_VALUES 20000
+#define NB_MAX_FILE_VALUES 200000
 #define MAX_YEAR 2100 // maximum year of input data
 
 tempTrender::tempTrender(std::string filePath) {
@@ -70,7 +72,7 @@ std::map<int, double> meanTempPerYear(std::vector<std::string> entries) {
         for(size_t i=0; i<MAX_YEAR; i++) {
                 if(nb_values[i]>0) {
                         mean = sum_values[i]/nb_values[i];
-                        std::cerr << "year : " << i << " mean : " << mean << std::endl;
+                        //std::cerr << "year : " << i << " mean : " << mean << std::endl;
                         ret.insert(std::make_pair<int, double>((int)i, (double)mean));
                 }
         }
@@ -96,8 +98,11 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
 
         std::map<int, double> mean = meanTempPerYear(entries);
 
+        // create canvas for graph
+        TCanvas *c1 = new TCanvas("Estelle", "Project : Mean Temp Per Year");
+
         // create new histogram object
-        TH1D* graph = new TH1D("graph", "Mean Temp Per Year", mean.size(), 1722, 2100);
+        TH1F* hist = new TH1F("graph", "Mean Temp Per Year", mean.size(), 1722, 2100);
 
 
         for( std::map<int, double>::iterator it = mean.begin();
@@ -105,21 +110,24 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
              it++ ) {
                 // fill hist with date and value from mean temp per year map
                 //std::cerr << "value : " << it->second << std::endl;
-                graph->Fill(it->first, it->second);
+                hist->Fill(it->first, it->second);
         }
-        
+
         //This code is given from project instruction for creating the graph
-        //TGraph* graph = new TGraph();
+        TGraph* graph = new TGraph();
+        
+        graph->SetHistogram(hist);
+        
         //for(int bin = 1; bin < hist->GetNbinsX(); ++bin) {
-            //graph->Expand(graph->GetN() + 1, 100);
-            //graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
-            //hist->GetBinContent(bin));
-        //}
+        //    graph->Expand(graph->GetN() + 1, 100);
+        //    graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
+        //    hist->GetBinContent(bin));
+       // }
         graph->Draw("SAME C");
 
         //void extrapolate(Int_t n)
 
-        //graph->Draw();
+        //hist->Draw();
 
 
 }
