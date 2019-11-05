@@ -1,4 +1,7 @@
 //author: Philip Siemund
+//Draws a 1D histogram showing temp. per day at a specified time during a year. The raw data 
+//is extracted from the datasets using a bash script tempdata.sh. The bash script is executed once whenever
+//the argument const char* town is specified for the first time for a given town. Check your paths!
 
 #include <iostream>
 #include <fstream>
@@ -39,7 +42,7 @@ Double_t temp;
 string quality;
 Int_t dayno;
 
-while (blah >> Year >> month >> day >> time >> temp >> quality >> dayno){
+while (file >> Year >> month >> day >> time >> temp >> quality >> dayno){
 
 	if (Year == year && time == hour) {
 	
