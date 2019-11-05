@@ -19,16 +19,16 @@ void tempPerDay(Int_t year, Int_t hour, const char* town){
 
 string fileName = Form("/Users/philipsiemund/MNXB01-Project-2019/datasets/data_for_%s.txt", town);
 
-ifstream temp(fileName);
+ifstream tempo(fileName);
 
-if(!temp) {
+if(!tempo) {
 cout << "Error: could not read from file ..." << endl; 
 cout << "Running tempdata.sh ..." << endl; 
 gSystem->Exec(Form("./tempdata.sh %s", town));
 
 }
 
-temp.close();
+tempo.close();
 ifstream file(fileName);
 
 TH1D* hist = new TH1D("Stats", Form("Temp. per day in %s at %d:00 UTC in %d; Day; Temperature [#circC]",town,hour,year), 
@@ -61,6 +61,7 @@ TCanvas* can = new TCanvas("can", "hist canvas", 900, 600);
 hist->SetLineColor(1);
 hist->Draw();
 
+can->SaveAs("hist.png");
 
 }
 
