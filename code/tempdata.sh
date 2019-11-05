@@ -1,9 +1,7 @@
 #!/bin/sh
-
 #author: Philip Siemund
-
 #Extracts only the temperature data from SMHI datasets and saves the output in a new file data_for_${DATASET}.txt
-#Requires GNU awk or mawk. Make sure to specify the correct paths! 
+#Requires GNU awk or mawk. Check your paths! 
 
 DATASET=$@
 OUTPUTFILENAME=data_for_${DATASET}
