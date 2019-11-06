@@ -13,6 +13,7 @@ class tempTrender {
 	//void tempPerDay(); //Make a histogram of the average temperature of each day of the year
 	//void hotCold(); //Make a histogram of the hottest and coldest day of the year
 	void tempPerYear(int yearToExtrapolate); //Make a histogram of average temperature per year, then fit and extrapolate to the given year
+	void hottestTempPerYear(int yearToExtrapol); //Make a histogram of hottest temperature per year, then fit (maybe if possible extrapolate to the given year)
 
 	private:
         // This is the path for input data
