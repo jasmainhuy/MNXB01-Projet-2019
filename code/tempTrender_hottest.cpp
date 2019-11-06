@@ -60,9 +60,9 @@ std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
 
                 // add value to arrays
                 if (value > hot_value[year]{
-					hot_values[year]= value;
-				}
-		// return variable
+                    hot_values[year]= value;
+                }
+        // return variable
         std::map<int, double> ret;
         double hot;
 
@@ -71,8 +71,8 @@ std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
                hot = hot_value[i];
                std::cerr << "year : " << i << " hottest temp : " << hot << std::endl;
                ret.insert(std::make_pair<int, double>((int)i, (double)hot));
-                }
         }
+       }
 
         return ret;
 }
