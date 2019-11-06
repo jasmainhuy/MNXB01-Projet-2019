@@ -126,25 +126,29 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
                 //std::cerr << "value : " << it->second << std::endl;
                 hist->Fill(it->first, it->second);
         }
-        //Draw horizontal mean
+
+        // Draw horizontal mean
         TLine *meanline = new TLine (1722,meanAllTime,2013,meanAllTime);
         
-        //This code is given from project instruction for creating the graph
-        TGraph* graph = new TGraph();
+        // This code is given from project instruction for creating the graph
+        //TGraph* graph = new TGraph();
         
-        graph->SetHistogram(hist);
+        // try to add hist to graph, but the graph doesn't draw anything...
+        //hist->SetHistogram(graph);
         
         //for(int bin = 1; bin < hist->GetNbinsX(); ++bin) {
         //    graph->Expand(graph->GetN() + 1, 100);
         //    graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
         //    hist->GetBinContent(bin));
-       // }
+        //}
         //graph->Draw("SAME C");
 
-        //void extrapolate(Int_t n)
+        // create function for extrapolation
+        //TF1 *f = (TF1*)hist->GetFunction("pol7");
+        //f->Eval(yearToExtrapolate);
 
         //graph->PaintGraph("B");
-        meanline->Draw();
+        //meanline->Draw();
         hist->Draw();
 
 
