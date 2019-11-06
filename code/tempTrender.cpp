@@ -21,8 +21,7 @@ tempTrender::tempTrender(string filePath) {
 
 
 
-
-void tempTrender::tempOnDay(string Day) {
+void tempTrender::tempOnDay(int Day) {
 	
     ifstream file(_filePath.c_str());
     
@@ -50,15 +49,15 @@ void tempTrender::tempOnDay(string Day) {
 		line = entries[i];
 		
 		//get the day from 22th character
-		day = stoi(line.substr(22,3));
+		day = stoi(line.substr(22,4));
 		if (day == Day)
 		{
 			//get the corresponding temperature at the 16th character
 			temp[j]= stof(line.substr(16,3));
 			j=j+1;
 		}
-		
 	}
+	
 	
 	//creating histogram
 	TH1D* Hist = new TH1D("Hist", "Temperature on a given day", 100, -20, 40);

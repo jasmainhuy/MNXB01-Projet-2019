@@ -18,13 +18,8 @@ class tempTrender
 	
 	private:
 	
-	
+	std::string _filePath;
 
 };
-
-void tempTrender::tempOnDay(int dateToCalculate){
-	
-	
-}
 
 #endif
