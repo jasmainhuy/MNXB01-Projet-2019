@@ -28,7 +28,7 @@ tempTrender::tempTrender(std::string filePath) {
 }
 
 //////////////////////////////////
-// JASMAIN CODE PART
+// JASMAIN CODE PART:
 //////////////////////////////////
 
 /* Function hottest temp per year
