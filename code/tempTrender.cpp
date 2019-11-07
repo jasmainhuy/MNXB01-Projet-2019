@@ -314,13 +314,21 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         //TF1 *f = (TF1*)hist->GetFunction("pol7");
         //f->Eval(yearToExtrapolate);
 
-        //graph->PaintGraph("B");
-        //meanline->Draw();
-
         // mean value printed
         gStyle->SetOptStat("m"); // Note : doesn't work :(
+        
+        //Axis title
+        hist->SetTitle("Mean temperature per year (Uppsala, 1722-2013)");
+        hist->GetXaxis()->SetTitle("Year");
+        hist->GetXaxis()->CenterTitle();
+        hist->GetYaxis()->SetTitle("Mean temperature (Celcius Deg)");
+        hist->GetYaxis()->CenterTitle();
 
         // draw hist
         hist->Draw("SAME");
+
+        // draw mean line
+        meanline->Draw();
+
 }
 
