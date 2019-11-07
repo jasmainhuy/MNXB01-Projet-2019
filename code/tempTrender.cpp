@@ -12,7 +12,11 @@
 
 #define NB_MAX_FILE_VALUES 200000
 #define MAX_YEAR 2100 // maximum year of input data
+#define MIN_TEMP_VALUE -100 // minimum value of temperature
 
+/*
+ * Constructor
+ */
 tempTrender::tempTrender(std::string filePath) {
         // Store file path parameter into member variable
         _filePath = filePath;
@@ -21,9 +25,118 @@ tempTrender::tempTrender(std::string filePath) {
         //cout << "You should probably store this information in a member variable of the class. Good luck with the project! :)" << endl;
 }
 
-//void tempTrender::hottestTempPerYear(int yearToExtrapol) {
-    // code de jasmin
-//}
+//////////////////////////////////
+// JASMAIN CODE PART
+//////////////////////////////////
+
+/* Function hottest temp per year
+ * @param vector of strings
+ *               with following format "%s %s %s %s %s" 
+ *               (year, month, day, temp, temp with urban correction, city)
+ * @return map of mean temp per year
+ */
+std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
+        // temporary values
+        std::string year_str, value_str;
+        size_t pos;
+        int year;
+        double value;
+
+        // storage
+        int nb_values[MAX_YEAR]={0};
+        double hot_values[MAX_YEAR]={0};
+        
+        // initialise hot_values to have a minimum value
+        for(size_t i=0; i<MAX_YEAR; i++) {
+            hot_values[i] = MIN_TEMP_VALUE;
+        }
+
+        // for each entry, extract year and value
+        for(size_t y=0; y<entries.size(); y++) {
+
+                std::string s = entries[y];
+
+                // get year from 4 first characters
+                year_str = s.substr(0, 4);
+                year = atoi(year_str.c_str());
+
+                // get value from 5th field
+                for(size_t i=0; i<4; i++) {
+                        pos = s.find(' '); // find first delimiter
+                        s.substr(0, pos);
+                        s.erase(0, pos + 1);
+                }
+                pos = s.find(' ');
+                value_str = s.substr(0, pos);
+                value = atof(value_str.c_str());
+
+                // add value to arrays
+                // Note : correct algorithm for max value, good job Jasmin
+                if (value > hot_values[year]{
+                    hot_values[year] = value;
+                }
+        }
+        
+        // return variable
+        std::map<int, double> ret;
+        double hot;
+
+        // for each year, compute mean value
+        for(size_t i=0; i<MAX_YEAR; i++) {
+               hot = hot_value[i];
+               //std::cerr << "year : " << i << " hottest temp : " << hot << std::endl;
+               ret.insert(std::make_pair<int, double>((int)i, (double)hot));
+        }
+        return ret;
+}
+
+void tempTrender::hottestTempPerYear(int yearToExtrapol) {
+
+        // open input file
+        std::string line;
+        ifstream inputfile(_filePath.c_str());
+
+        // create array to store values
+        std::vector<std::string> entries;
+
+        // read values and stor it into array, hist or something else
+        if(inputfile.is_open()) {
+                while(getline(inputfile, line)) {
+                        entries.push_back(line);
+                }
+        }
+
+        std::map<int, double> hot = hotTempPerYear(entries);
+
+        // create new histogram object
+        TH1D* hist = new TH1D("hist", "Hottest Temp Per Year", hot.size(), 1722, 2013);
+        
+        for( std::map<int, double>::iterator it = mean.begin();
+             it != hot.end();
+             it++ ) {
+                // fill hist with date and value from mean temp per year map
+                //std::cerr << "value : " << it->second << std::endl;
+                hist->Fill(it->first, it->second);
+        }
+
+        void extrapolate(Int_t n)
+
+        hist->Draw();
+
+        //This code is given from project instruction for creating the graph
+        //TGraph* graph = new TGraph();
+        //for(int bin = 1; bin < hist->GetNbinsX(); ++bin) {
+        //        graph->Expand(graph->GetN() + 1, 100);
+        //        graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
+        //                hist->GetBinContent(bin));
+        //}
+        //graph->Draw("SAME C");
+}
+
+
+//////////////////////////////////
+// JOHAN CODE PART
+//////////////////////////////////
 
 void tempTrender::tempOnDay(int Day) {
 
@@ -80,6 +193,9 @@ void tempTrender::tempOnDay(int Day) {
     return 0;
 }
 
+//////////////////////////////////
+// ESTELLE CODE PART
+//////////////////////////////////
 
 /* Function mean temp per year
  * @param vector of strings
