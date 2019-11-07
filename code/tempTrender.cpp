@@ -240,7 +240,7 @@ std::map<int, double> meanTempPerYear(std::vector<std::string> entries) {
         for(size_t i=0; i<MAX_YEAR; i++) {
                 if(nb_values[i]>0) {
                         mean = sum_values[i]/nb_values[i];
-                        //std::cerr << "year : " << i << " mean : " << mean << std::endl;
+                        std::cerr << "year : " << i << " mean : " << mean << std::endl;
                         ret.insert(std::make_pair<int, double>((int)i, (double)mean));
                 }
         }
@@ -300,9 +300,6 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         // This code is given from project instruction for creating the graph
         //TGraph* graph = new TGraph();
         
-        // try to add hist to graph, but the graph doesn't draw anything...
-        //hist->SetHistogram(graph);
-        
         //for(int bin = 1; bin < hist->GetNbinsX(); ++bin) {
         //    graph->Expand(graph->GetN() + 1, 100);
         //    graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
@@ -314,9 +311,6 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         //TF1 *f = (TF1*)hist->GetFunction("pol7");
         //f->Eval(yearToExtrapolate);
 
-        // mean value printed
-        gStyle->SetOptStat("m"); // Note : doesn't work :(
-        
         //Axis title
         hist->SetTitle("Mean temperature per year (Uppsala, 1722-2013)");
         hist->GetXaxis()->SetTitle("Year");
