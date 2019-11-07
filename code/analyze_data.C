@@ -1,4 +1,4 @@
-//author: Philip Siemund
+//author: Philip Siemund,
 //Draws a 1D histogram showing temp. per day at a specified time during a year. The raw data 
 //is extracted from the datasets using a bash script tempdata.sh. The bash script is executed once whenever
 //the argument const char* town is specified for the first time for a given town. Check your paths!
