@@ -72,7 +72,7 @@ std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
 
                 // add value to arrays
                 // Note : correct algorithm for max value, good job Jasmin
-                if (value > hot_values[year]{
+                if (value > hot_values[year] ) {
                     hot_values[year] = value;
                 }
         }
@@ -83,7 +83,7 @@ std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
 
         // for each year, compute mean value
         for(size_t i=0; i<MAX_YEAR; i++) {
-               hot = hot_value[i];
+               hot = hot_values[i];
                //std::cerr << "year : " << i << " hottest temp : " << hot << std::endl;
                ret.insert(std::make_pair<int, double>((int)i, (double)hot));
         }
@@ -111,26 +111,15 @@ void tempTrender::hottestTempPerYear(int yearToExtrapol) {
         // create new histogram object
         TH1D* hist = new TH1D("hist", "Hottest Temp Per Year", hot.size(), 1722, 2013);
         
-        for( std::map<int, double>::iterator it = mean.begin();
+        for( std::map<int, double>::iterator it = hot.begin();
              it != hot.end();
              it++ ) {
                 // fill hist with date and value from mean temp per year map
                 //std::cerr << "value : " << it->second << std::endl;
                 hist->Fill(it->first, it->second);
         }
-
-        void extrapolate(Int_t n)
-
+        
         hist->Draw();
-
-        //This code is given from project instruction for creating the graph
-        //TGraph* graph = new TGraph();
-        //for(int bin = 1; bin < hist->GetNbinsX(); ++bin) {
-        //        graph->Expand(graph->GetN() + 1, 100);
-        //        graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
-        //                hist->GetBinContent(bin));
-        //}
-        //graph->Draw("SAME C");
 }
 
 
@@ -138,7 +127,11 @@ void tempTrender::hottestTempPerYear(int yearToExtrapol) {
 // JOHAN CODE PART
 //////////////////////////////////
 
-void tempTrender::tempOnDay(int Day) {
+// NOTE : you should give more explicit names to your variables
+// Single letter variables are quite hard to maintain, prefer longer names
+
+// Be careful at which file is used
+void tempTrender::tempOnDay(int dateToCalculate) {
 
     ifstream file(_filePath.c_str());
     
@@ -146,8 +139,9 @@ void tempTrender::tempOnDay(int Day) {
     vector<string> entries;
     vector<float> temp;
     
-    string line, t;
+    string line;
     int i, j=0, day, s;
+    float t;
     
     //Check if the file is opened
     if(file.is_open()) 
@@ -166,11 +160,11 @@ void tempTrender::tempOnDay(int Day) {
         line = entries[i];
         
         //get the day from 22th character
-        day = stoi(line.substr(22,4));
-        if (day == Day)
+        day = atoi(line.substr(22,4).c_str());
+        if (day == dateToCalculate)
         {
             //get the corresponding temperature at the 16th character
-            temp[j]= stof(line.substr(16,3));
+            temp[j]= atof(line.substr(16,3).c_str());
             j=j+1;
         }
     }
@@ -189,8 +183,6 @@ void tempTrender::tempOnDay(int Day) {
     
     //drawing histogram
     Hist->Draw();
-
-    return 0;
 }
 
 //////////////////////////////////
