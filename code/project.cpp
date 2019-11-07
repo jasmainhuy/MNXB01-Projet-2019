@@ -9,6 +9,6 @@ void project() {
 	//t.tempOnDay(235);
 	//t.tempPerDay();
 	//t.hotCold();
-	t.hottestTempPerYear(2050);
+	//t.hottestTempPerYear(2050);
 	t.tempPerYear(2050);
 }

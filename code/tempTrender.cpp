@@ -22,6 +22,10 @@ tempTrender::tempTrender(std::string filePath) {
         //cout << "You should probably store this information in a member variable of the class. Good luck with the project! :)" << endl;
 }
 
+//void tempTrender::hottestTempPerYear(int yearToExtrapol) {
+    // code de jasmin
+//}
+
 /* Function mean temp per year
  * @param vector of strings
  *               with following format "%s %s %s %s %s" 
@@ -149,7 +153,10 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
 
         //graph->PaintGraph("B");
         //meanline->Draw();
-        hist->Draw();
 
+        // mean value printed
+        gStyle->SetOptStat("m"); // Note : doesn't work :(
 
+        // draw hist
+        hist->Draw("SAME");
 }
