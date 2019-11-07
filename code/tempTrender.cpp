@@ -4,17 +4,13 @@
 #include <fstream>
 #include <map>
 #include <stdlib.h>
-#include <TF1.h>
-#include <TStyle.h>
-#include <TGraph.h>
-#include <TCanvas.h>
-#include <TLine.h>
+
 #include <TH1.h> // 1d histogram classes
 
 #define NB_MAX_FILE_VALUES 200000
-#define MAX_YEAR 2100 // maximum year of input data
+#define MAX_YEAR 2013 // maximum year of input data
 
-tempTrender::tempTrender(std::string filePath) {
+tempTrender::tempTrender(string filePath) {
         // Store file path parameter into member variable
         _filePath = filePath;
 
@@ -28,7 +24,7 @@ tempTrender::tempTrender(std::string filePath) {
  *               (year, month, day, temp, temp with urban correction, city)
  * @return map of mean temp per year
  */
-std::map<int, double> meanTempPerYear(std::vector<std::string> entries) {
+std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
         // we assume that values are uniformatically spread on the year
 
         // temp values
@@ -49,6 +45,8 @@ std::map<int, double> meanTempPerYear(std::vector<std::string> entries) {
                 // get year from 4 first characters
                 year_str = s.substr(0, 4);
                 year = atoi(year_str.c_str());
+                
+                hot_value[year] = -100;
 
                 // get value from 5th field
                 for(size_t i=0; i<4; i++) {
@@ -61,27 +59,26 @@ std::map<int, double> meanTempPerYear(std::vector<std::string> entries) {
                 value = atof(value_str.c_str());
 
                 // add value to arrays
-                nb_values[year]++;
-                sum_values[year]+=value;
-        }
-
+                if (value > hot_value[year]{
+                    hot_values[year]= value;
+                }
         // return variable
         std::map<int, double> ret;
-        double mean;
+        double hot;
 
         // for each year, compute mean value
         for(size_t i=0; i<MAX_YEAR; i++) {
-                if(nb_values[i]>0) {
-                        mean = sum_values[i]/nb_values[i];
-                        //std::cerr << "year : " << i << " mean : " << mean << std::endl;
-                        ret.insert(std::make_pair<int, double>((int)i, (double)mean));
-                }
+               hot = hot_value[i];
+               std::cerr << "year : " << i << " hottest temp : " << hot << std::endl;
+               ret.insert(std::make_pair<int, double>((int)i, (double)hot));
         }
+       }
 
         return ret;
 }
-
-void tempTrender::tempPerYear(int yearToExtrapolate) {
+        }
+        
+void tempTrender::hottestTempPerYear(int yearToExtrapol) {
 
         // open input file
         std::string line;
@@ -90,66 +87,54 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         // create array to store values
         std::vector<std::string> entries;
 
-        // read values and store it into array, hist or something else
+        // read values and stor it into array, hist or something else
         if(inputfile.is_open()) {
                 while(getline(inputfile, line)) {
                         entries.push_back(line);
                 }
         }
-
-        // compute mean per year
-        std::map<int, double> meanPerYear = meanTempPerYear(entries);
         
-        // compute mean for all time
-        double meanAllTime = 0;
-        for( std::map<int, double>::iterator it = meanPerYear.begin();
-             it != meanPerYear.end();
+        //compute hottest temp per year
+        std::map<int, double> hot = hotTempPerYear(entries);
+        
+        //compute hot temp for all time
+        double hottestAllTime = 0;
+        for( std::map<int, double>::iterator it = hot.begin();
+             it != hot.end();
              it++ ) {
-                 meanAllTime += it->second;
-         }
-         meanAllTime /= meanPerYear.size();
-         
-         std::cout << "meanAllTime = " << meanAllTime << endl;
+                 hottestAllTime += it->second;
+                 
+        }
+        hottestAllTime /= hot.size();
         
-
-        // create canvas for graph
-        TCanvas *c1 = new TCanvas("Estelle", "Project : Mean Temp Per Year");
+        
+        //create canvas for graph
+        TCanvas *c1 = new TCanvas("Jasmain", "Project : Hottest Temp Per Year ");
 
         // create new histogram object
-        TH1F* hist = new TH1F("graph", "Mean Temp Per Year", meanPerYear.size(), 1722, 2100);
-
-        // fill hist with mean temp per year values from input file
-        for( std::map<int, double>::iterator it = meanPerYear.begin();
-             it != meanPerYear.end();
+        TH1D* hist = new TH1D("hist", "Hottest Temp Per Year", hot.size(), 1722, 2013);
+        
+        
+        //fill hist with hotteest temp per year values from input file
+        for( std::map<int, double>::iterator it = hot.begin();
+             it != hot.end();
              it++ ) {
-                // fill hist with date and value from mean temp per year map
+                // fill hist with date and value from hottest temp per year map
                 //std::cerr << "value : " << it->second << std::endl;
                 hist->Fill(it->first, it->second);
         }
-
-        // Draw horizontal mean
-        TLine *meanline = new TLine (1722,meanAllTime,2013,meanAllTime);
         
-        // This code is given from project instruction for creating the graph
-        //TGraph* graph = new TGraph();
         
-        // try to add hist to graph, but the graph doesn't draw anything...
-        //hist->SetHistogram(graph);
-        
-        //for(int bin = 1; bin < hist->GetNbinsX(); ++bin) {
-        //    graph->Expand(graph->GetN() + 1, 100);
-        //    graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
-        //    hist->GetBinContent(bin));
-        //}
-        //graph->Draw("SAME C");
 
-        // create function for extrapolation
-        //TF1 *f = (TF1*)hist->GetFunction("pol7");
-        //f->Eval(yearToExtrapolate);
-
-        //graph->PaintGraph("B");
-        //meanline->Draw();
+        TLine *hotline = new TLine(1722, hottestAllTime,2013,hottestAllTime);
         hist->Draw();
 
-
+        //This code is given from project instruction for creating the graph
+        //TGraph* graph = new TGraph();
+        //for(int bin = 1; bin < hist->GetNbinsX(); ++bin) {
+        //        graph->Expand(graph->GetN() + 1, 100);
+        //        graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
+        //                hist->GetBinContent(bin));
+        //}
+        //graph->Draw("SAME C");
 }
