@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2019 11 07
+- merged Jasmain work into tempTrender (Estelle)
+- merged Johan branch into master (Estelle)
+- fixed compilation errors (Estelle)
+- removed unused branches to avoid future conflicts (Estelle)
+- pushed git content to gitlab public repository for release (Estelle)
+- fixed tempPerYear() with better graph usage (Estelle)
+
 ## [0.5.0] - 2019 11 06
 - created the folder presentation and report (Philip)
 
