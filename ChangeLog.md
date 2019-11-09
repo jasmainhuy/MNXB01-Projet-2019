@@ -5,11 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2019 11 10
+- fixed all function with better plot (Estelle, Johan, Jasmain)
+- created the final group report and presentation (Estelle, Johan, Jasmain)
+
 ## [0.7.0] - 2019 11 08
 - fixed tempPerYear() with better plot (Estelle)
 - created the report (Estelle)
 
 ## [0.6.0] - 2019 11 07
+- created function to calculate temperature on a given day (Johan)
 - merged Jasmain work into tempTrender (Estelle)
 - merged Johan branch into master (Estelle)
 - fixed compilation errors (Estelle)

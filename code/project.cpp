@@ -10,6 +10,7 @@ void project() {
     //t.tempOnDay(235);
     //t.tempPerDay();
     //t.hotCold();
-    t.hottestTempPerYear(2050);
+    t.coldestTempPerYear();
+    t.hottestTempPerYear();
     t.tempPerYear(2050);
 }
