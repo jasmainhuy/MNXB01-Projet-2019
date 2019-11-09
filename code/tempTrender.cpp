@@ -43,7 +43,6 @@ std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
         double value;
 
         // storage
-        int nb_values[MAX_YEAR]={0};
         double hot_values[MAX_YEAR]={0};
         
         // initialise hot_values to have a minimum value
@@ -71,7 +70,6 @@ std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
                 value = atof(value_str.c_str());
 
                 // add value to arrays
-                // Note : correct algorithm for max value, good job Jasmin
                 if (value > hot_values[year] ) {
                     hot_values[year] = value;
                 }
@@ -107,6 +105,9 @@ void tempTrender::hottestTempPerYear(int yearToExtrapol) {
         }
 
         std::map<int, double> hot = hotTempPerYear(entries);
+        
+        // create canvas for graph
+        TCanvas *c1 = new TCanvas("Jasmain", "Project : Hottest temperature over each year");
 
         // create new histogram object
         TH1D* hist = new TH1D("hist", "Hottest Temp Per Year", hot.size(), 1722, 2013);
@@ -119,7 +120,16 @@ void tempTrender::hottestTempPerYear(int yearToExtrapol) {
                 hist->Fill(it->first, it->second);
         }
         
-        hist->Draw();
+        
+        //Axis title
+        hist->SetTitle("Hottest temperature over each year (Uppsala, 1722-2013)");
+        hist->GetXaxis()->SetTitle("Year");
+        hist->GetXaxis()->CenterTitle();
+        hist->GetYaxis()->SetTitle("Hottest Temperature (Celsius deg)");
+        hist->GetYaxis()->CenterTitle();
+
+        // draw hist
+        hist->Draw("SAME");
 }
 
 
@@ -131,7 +141,7 @@ void tempTrender::hottestTempPerYear(int yearToExtrapol) {
 // Single letter variables are quite hard to maintain, prefer longer names
 
 // Be careful at which file is used
-void tempTrender::tempOnDay(int dateToCalculate) {
+void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
 
     ifstream file(_filePath.c_str());
     
@@ -139,8 +149,8 @@ void tempTrender::tempOnDay(int dateToCalculate) {
     vector<string> entries;
     vector<float> temp;
     
-    string line;
-    int i, j=0, day, s;
+    string line, month_str, day_str, temp_str;
+    int i, j=0, size, pos, month, day;
     float t;
     
     //Check if the file is opened
@@ -153,37 +163,52 @@ void tempTrender::tempOnDay(int dateToCalculate) {
         }
     }
     
-    s = entries.size();
-    //goes through all the entries
-    for(i=0; i<s; i++)
+    size = entries.size();
+    
+
+    
+    
+    TCanvas *c1= new TCanvas("Johan","Projet : ");
+    
+    //creating histogram
+    TH1D* hist = new TH1D("Hist", "Temperature on a given day", 100, -20, 40);
+    
+       //goes through all the entries
+    for(i=0; i<size; i++)
     {
         line = entries[i];
         
-        //get the day from 22th character
-        day = atoi(line.substr(22,4).c_str());
-        if (day == dateToCalculate)
+        //get the month from 2nd field               
+        pos = line.find(' '); 
+        line.erase(0, pos + 1);
+        pos = line.find(' ');
+        month_str = line.substr(0, pos);
+        month = atoi(month_str.c_str());
+        
+        //get the day from 3rd field               
+        pos = line.find(' '); 
+        line.erase(0, pos + 1);
+        pos = line.find(' ');
+        day_str = line.substr(0, pos);
+        day = atoi(day_str.c_str());
+        
+        
+        if ((month == monthToCalculate) && (day == dayToCalculate))
         {
-            //get the corresponding temperature at the 16th character
-            temp[j]= atof(line.substr(16,3).c_str());
-            j=j+1;
+            //get the corresponding temperature at the 4th field
+            pos = line.find(' '); 
+            line.erase(0, pos + 1);
+            pos = line.find(' ');
+            temp_str = line.substr(0, pos);
+            t = atof(temp_str.c_str());
+            hist->Fill(t);
         }
     }
-    
-    
-    //creating histogram
-    TH1D* Hist = new TH1D("Hist", "Temperature on a given day", 100, -20, 40);
-    
-    
-    //filling up histogram with the values from vector temp
-    for (i=0; i<j; i++)
-    {
-        t=temp[j];
-        Hist->Fill(t);
-    }
-    
     //drawing histogram
-    Hist->Draw();
+    hist->Draw("SAME");
 }
+
+
 
 //////////////////////////////////
 // ESTELLE CODE PART
@@ -283,7 +308,7 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         TCanvas *c1 = new TCanvas("Estelle", "Project : Mean Temp Per Year");
 
         // create new histogram object
-        TH1F* hist = new TH1F("graph", "Mean Temp Per Year", meanPerYear.size(), 1722, 2100);
+        TH1F* hist = new TH1F("graph", "Mean Temp Per Year", meanPerYear.size(), 1722, 2013);
 
         // fill hist with mean temp per year values from input file
         for( std::map<int, double>::iterator it = meanPerYear.begin();
@@ -298,17 +323,17 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         TLine *meanline = new TLine (1722,meanAllTime,2013,meanAllTime);
         
         // This code is given from project instruction for creating the graph
-        //TGraph* graph = new TGraph();
+        TGraph* graph = new TGraph();
         
-        //for(int bin = 1; bin < hist->GetNbinsX(); ++bin) {
-        //    graph->Expand(graph->GetN() + 1, 100);
-        //    graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
-        //    hist->GetBinContent(bin));
-        //}
+        for(int bin = 1; bin < hist->GetNbinsX(); ++bin) {
+            graph->Expand(graph->GetN() + 1, 100);
+            graph->SetPoint(graph->GetN(), hist->GetBinCenter(bin),
+                hist->GetBinContent(bin));
+        }
         //graph->Draw("SAME C");
 
         // create function for extrapolation
-        //TF1 *f = (TF1*)hist->GetFunction("pol7");
+        TF1 *f = (TF1*)hist->GetFunction("pol7");
         //f->Eval(yearToExtrapolate);
 
         //Axis title
@@ -319,7 +344,7 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         hist->GetYaxis()->CenterTitle();
 
         // draw hist
-        hist->Draw("SAME");
+        hist->Draw("SAME C");
 
         // draw mean line
         meanline->Draw();
