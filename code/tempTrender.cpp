@@ -8,8 +8,8 @@
 #include <TGraph.h>
 #include <TCanvas.h>
 #include <TLine.h>
-#include <TH1.h> // 1d histogram classes
 
+#include <TH1.h> // 1d histogram classes
 #define NB_MAX_FILE_VALUES 200000
 #define MAX_YEAR 2100 // maximum year of input data
 #define MIN_TEMP_VALUE -100 // minimum value of temperature
@@ -20,7 +20,7 @@
 tempTrender::tempTrender(std::string filePath) {
         // Store file path parameter into member variable
         _filePath = filePath;
-
+        
         //cout << "The user supplied " << filePath << " as the path to the data file." << endl;
         //cout << "You should probably store this information in a member variable of the class. Good luck with the project! :)" << endl;
 }
@@ -41,7 +41,7 @@ std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
         size_t pos;
         int year;
         double value;
-
+        
         // storage
         double hot_values[MAX_YEAR]={0};
         
@@ -49,16 +49,14 @@ std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
         for(size_t i=0; i<MAX_YEAR; i++) {
             hot_values[i] = MIN_TEMP_VALUE;
         }
-
+        
         // for each entry, extract year and value
         for(size_t y=0; y<entries.size(); y++) {
-
                 std::string s = entries[y];
-
                 // get year from 4 first characters
                 year_str = s.substr(0, 4);
                 year = atoi(year_str.c_str());
-
+                
                 // get value from 5th field
                 for(size_t i=0; i<4; i++) {
                         pos = s.find(' '); // find first delimiter
@@ -68,7 +66,7 @@ std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
                 pos = s.find(' ');
                 value_str = s.substr(0, pos);
                 value = atof(value_str.c_str());
-
+                
                 // add value to arrays
                 if (value > hot_values[year] ) {
                     hot_values[year] = value;
@@ -78,25 +76,26 @@ std::map<int, double> hotTempPerYear(std::vector<std::string> entries) {
         // return variable
         std::map<int, double> ret;
         double hot;
-
+        
         // for each year, compute mean value
         for(size_t i=0; i<MAX_YEAR; i++) {
                hot = hot_values[i];
-               //std::cerr << "year : " << i << " hottest temp : " << hot << std::endl;
+               std::cerr << "year : " << i << " hottest temp : " << hot << std::endl;
                ret.insert(std::make_pair<int, double>((int)i, (double)hot));
         }
         return ret;
 }
-
 void tempTrender::hottestTempPerYear(int yearToExtrapol) {
-
+        
         // open input file
         std::string line;
         ifstream inputfile(_filePath.c_str());
-
+        
+        
         // create array to store values
         std::vector<std::string> entries;
-
+        
+        
         // read values and stor it into array, hist or something else
         if(inputfile.is_open()) {
                 while(getline(inputfile, line)) {
@@ -110,10 +109,10 @@ void tempTrender::hottestTempPerYear(int yearToExtrapol) {
         TCanvas *c1 = new TCanvas("Jasmain", "Project : Hottest temperature over each year");
 
         // create new histogram object
-        TH1D* hist = new TH1D("hist", "Hottest Temp Per Year", hot.size(), 1722, 2013);
+        TH1D* hist = new TH1D("hist", "Hottest Temp Per Year", hotPerYear.size(), 1722, 2013);
         
-        for( std::map<int, double>::iterator it = hot.begin();
-             it != hot.end();
+        for( std::map<int, double>::iterator it = hotPerYear.begin();
+             it != hotPerYear.end();
              it++ ) {
                 // fill hist with date and value from mean temp per year map
                 //std::cerr << "value : " << it->second << std::endl;
@@ -141,8 +140,9 @@ void tempTrender::hottestTempPerYear(int yearToExtrapol) {
 // Single letter variables are quite hard to maintain, prefer longer names
 
 // Be careful at which file is used
-void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
 
+void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
+    
     ifstream file(_filePath.c_str());
     
     //Defining all vaiables we need
@@ -221,27 +221,28 @@ void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
  * @return map of mean temp per year
  */
 std::map<int, double> meanTempPerYear(std::vector<std::string> entries) {
+        
         // we assume that values are uniformatically spread on the year
-
+        
         // temp values
         std::string year_str, value_str;
         size_t pos;
         int year;
         double value;
-
+        
         // storage
         int nb_values[MAX_YEAR]={0};
         double sum_values[MAX_YEAR]={0};
-
+        
         // for each entry, extract year and value
         for(size_t y=0; y<entries.size(); y++) {
-
+                
                 std::string s = entries[y];
-
+                
                 // get year from 4 first characters
                 year_str = s.substr(0, 4);
                 year = atoi(year_str.c_str());
-
+                
                 // get value from 5th field
                 for(size_t i=0; i<4; i++) {
                         pos = s.find(' '); // find first delimiter
@@ -251,16 +252,15 @@ std::map<int, double> meanTempPerYear(std::vector<std::string> entries) {
                 pos = s.find(' ');
                 value_str = s.substr(0, pos);
                 value = atof(value_str.c_str());
-
                 // add value to arrays
                 nb_values[year]++;
                 sum_values[year]+=value;
         }
-
+        
         // return variable
         std::map<int, double> ret;
         double mean;
-
+        
         // for each year, compute mean value
         for(size_t i=0; i<MAX_YEAR; i++) {
                 if(nb_values[i]>0) {
@@ -269,26 +269,26 @@ std::map<int, double> meanTempPerYear(std::vector<std::string> entries) {
                         ret.insert(std::make_pair<int, double>((int)i, (double)mean));
                 }
         }
-
+        
         return ret;
 }
 
 void tempTrender::tempPerYear(int yearToExtrapolate) {
-
+        
         // open input file
         std::string line;
         ifstream inputfile(_filePath.c_str());
-
+        
         // create array to store values
         std::vector<std::string> entries;
-
+        
         // read values and store it into array, hist or something else
         if(inputfile.is_open()) {
                 while(getline(inputfile, line)) {
                         entries.push_back(line);
                 }
         }
-
+        
         // compute mean per year
         std::map<int, double> meanPerYear = meanTempPerYear(entries);
         
@@ -303,11 +303,12 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
          
          std::cout << "meanAllTime = " << meanAllTime << endl;
         
-
+        
         // create canvas for graph
         TCanvas *c1 = new TCanvas("Estelle", "Project : Mean Temp Per Year");
-
+        
         // create new histogram object
+
         TH1F* hist = new TH1F("graph", "Mean Temp Per Year", meanPerYear.size(), 1722, 2013);
 
         // fill hist with mean temp per year values from input file
@@ -318,11 +319,12 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
                 //std::cerr << "value : " << it->second << std::endl;
                 hist->Fill(it->first, it->second);
         }
-
+        
         // Draw horizontal mean
         TLine *meanline = new TLine (1722,meanAllTime,2013,meanAllTime);
         
         // This code is given from project instruction for creating the graph
+
         TGraph* graph = new TGraph();
         
         for(int bin = 1; bin < hist->GetNbinsX(); ++bin) {
@@ -331,10 +333,13 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
                 hist->GetBinContent(bin));
         }
         //graph->Draw("SAME C");
-
+        
         // create function for extrapolation
         TF1 *f = (TF1*)hist->GetFunction("pol7");
         //f->Eval(yearToExtrapolate);
+
+        // mean value printed
+        gStyle->SetOptStat("m"); // Note : doesn't work :(
 
         //Axis title
         hist->SetTitle("Mean temperature per year (Uppsala, 1722-2013)");
@@ -342,12 +347,10 @@ void tempTrender::tempPerYear(int yearToExtrapolate) {
         hist->GetXaxis()->CenterTitle();
         hist->GetYaxis()->SetTitle("Mean temperature (Celcius Deg)");
         hist->GetYaxis()->CenterTitle();
-
+        
         // draw hist
-        hist->Draw("SAME C");
+        hist->Draw("SAME");
 
         // draw mean line
         meanline->Draw();
-
 }
-
