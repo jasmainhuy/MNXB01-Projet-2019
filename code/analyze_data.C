@@ -9,15 +9,15 @@
 
 using namespace std;
 
-#include </Users/philipsiemund/root_v6.18.04/include/TH1.h> 
-#include </Users/philipsiemund/root_v6.18.04/include/TH2.h> 
-#include </Users/philipsiemund/root_v6.18.04/include/TCanvas.h> 
-#include </Users/philipsiemund/root_v6.18.04/include/TLatex.h>
-#include </Users/philipsiemund/root_v6.18.04/include/TSystem.h>
+#include <TH1.h> 
+#include <TH2.h> 
+#include <TCanvas.h> 
+#include <TLatex.h>
+#include <TSystem.h>
 
 void tempPerDay(Int_t year, Int_t hour, const char* town){
 
-string fileName = Form("/Users/philipsiemund/MNXB01-Project-2019/datasets/data_for_%s.txt", town);
+string fileName = Form("../datasets/data_for_%s.txt", town);
 
 ifstream tempo(fileName);
 
